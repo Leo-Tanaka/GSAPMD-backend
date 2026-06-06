@@ -1,5 +1,8 @@
 package com.fiap.gs.gs_apmd_backend.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.fiap.gs.gs_apmd_backend.dto.TelemetryDTO;
 import com.fiap.gs.gs_apmd_backend.model.CriticalAlert;
 import com.fiap.gs.gs_apmd_backend.model.Module;
@@ -7,9 +10,8 @@ import com.fiap.gs.gs_apmd_backend.model.OperationalEvent;
 import com.fiap.gs.gs_apmd_backend.repository.CriticalAlertRepository;
 import com.fiap.gs.gs_apmd_backend.repository.ModuleRepository;
 import com.fiap.gs.gs_apmd_backend.repository.OperationalEventRepository;
+
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class TelemetryService {
@@ -49,5 +51,13 @@ public class TelemetryService {
         }
 
         return event;
+    }
+
+    @Transactional
+    public void deleteTelemetry(Long id) {
+        if (!eventRepo.existsById(id)) {
+            throw new RuntimeException("Registro de telemetria não encontrado para o ID: " + id);
+        }
+        eventRepo.deleteById(id);
     }
 }
